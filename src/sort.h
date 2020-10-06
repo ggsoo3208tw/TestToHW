@@ -3,11 +3,9 @@
 template <class RandomAccessIterator, class Compare>
 void quickSort(RandomAccessIterator first, RandomAccessIterator last, Compare comp) {
   size_t numElements = std::distance(first, last);
-  std::cout << numElements << std::endl;
   // already sorted ?
-  if (numElements <= 1){
-    return;//stop
-  }
+  if (numElements <= 1)
+    return;
   RandomAccessIterator pivot = last;
   --pivot;
   // choose middle element as pivot (good choice for partially sorted data)
@@ -21,21 +19,17 @@ void quickSort(RandomAccessIterator first, RandomAccessIterator last, Compare co
   RandomAccessIterator right = pivot;
   while (left != right){
     // look for mismatches
-    while (!comp(*pivot, *left)  && left != right){
+    while (!comp(*pivot, *left)  && left != right)
       ++left;
-    }
-    while (!comp(*right, *pivot) && left != right){
+    while (!comp(*right, *pivot) && left != right)
       --right;
-    }
     // swap two values which are both on the wrong side of the pivot element
-    if (left != right){
+    if (left != right)
       std::iter_swap(left, right);
-    }
   }
   // move pivot to its final position
-  if (pivot != left && comp(*pivot, *left)){
+  if (pivot != left && comp(*pivot, *left))
     std::iter_swap(pivot, left);
-  }
   // subdivide
   quickSort(first,  left, comp);
   quickSort(++left, last, comp); // *left itself is already sorted
