@@ -1,17 +1,43 @@
 #include <string>//string must include
 #include <iostream>// cout,endl must include
+#include <fstream>
+using namespace std;
 
 #include "terminal.h"
 
 int main(int argc, char *argv[]){
-  std::cout << "argv length => " << argc << std::endl;
-  std::string input(argv[1]);
-  std::string output(argv[2]);
-  std::string featur(argv[3]);
-  std::string order(argv[4]);
-  std::cout << "input => " << input << std::endl;
-  std::cout << "output => " << output << std::endl;
-  std::cout << "featur => " << featur << std::endl;
-  std::cout << "order => " << order << std::endl;
+  string input = string(argv[1]);
+  string output = string(argv[2]);
+  string featur = string(argv[3]);
+  string order = string(argv[4]);
+  fstream file;
+  char ch, buffer[200];
+  int chCount = 0;
+  string result;
+  file.open(input, ios::in);
+  if(!file){
+     cout << "Can't open file" << endl;
+  }else{
+    while(file.get(ch)){
+      if(ch == '\r' || ch == '\n'){
+        buffer[chCount++] = ' ';
+        continue;
+      }
+      buffer[chCount++] = ch;
+    }
+    buffer[chCount]='\0';
+    result = string(buffer) + ' ' + featur + ' ' + order;
+    file.close();
+  }
+  Terminal terminal(result);
+  cout << "------------" << endl;
+  string a = terminal.showResult();
+  file.open(output, ios::out | ios::trunc);
+  if(file.fail()){
+    cout << "Can't open file";
+  }else{
+    file.write(a.c_str(), sizeof(char)*a.size());
+    file.close();
+  }
   return 0;
 }
